@@ -3,10 +3,16 @@ export class Size {
     }
 
     public getSize(){
-        return {
-            sizeSystem: this.sizeSystem,
-            size: this.size,
-            sizePosition: this.sizePosition
-        }
+        return this.size;
     }
+
+    public getSizeSystem(){
+        return this.sizeSystem;
+    }
+
+    public getSizePosition(){
+        return this.sizePosition;
+    }
+
+
 }

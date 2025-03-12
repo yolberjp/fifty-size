@@ -9,18 +9,21 @@ export class SizeChart {
     setSize(size: Size){
         this.sizes.push(size);
     }
+    public getCategories(){
+        return this.categories;
+    }
 
     public getSizes(){
         return this.sizes;
     }
 
     public getSizeSystems(){
-        const sizeSystems = this.sizes.map(size => size.getSize().sizeSystem)
+        const sizeSystems = this.sizes.map(size => size.getSizeSystem())
         return new Set(sizeSystems);  
     }
 
     public getSizesBySizeSystem(sizeSystem: string){
-        return this.sizes.filter(size => size.getSize().sizeSystem === sizeSystem);
+        return this.sizes.filter(size => size.getSizeSystem() === sizeSystem);
     }
 
     public getSizesJson(): {sizeSystem: string, sizes: {size: string, sizePosition: number}[]}[]{
@@ -32,8 +35,8 @@ export class SizeChart {
             sizesJson.push({
                 sizeSystem: sizeSystem,
                 sizes: sizes.map(size => ({
-                    size: size.getSize().size,
-                    sizePosition: size.getSize().sizePosition
+                    size: size.getSize(),
+                    sizePosition: size.getSizePosition()
                 }))
             });
         });
