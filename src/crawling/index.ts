@@ -1,13 +1,11 @@
+import dotenv from 'dotenv';
 import { chromium } from "playwright";
 import { Brand } from "./entities/Brand";
 import { SizeChart } from "./entities/SizeChart";
 import { Category } from "./entities/Category";
 import { Size } from "./entities/Size";
-import dotenv from 'dotenv';
 
 dotenv.config();
-
-const BASE_URL = 'https://sizecharts.looksize.com/brand-size-chart/';
 
 function parseCategories(categoryHeader: string) {
 
