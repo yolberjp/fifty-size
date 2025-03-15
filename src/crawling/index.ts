@@ -16,7 +16,7 @@ const getBrandSizeCharts = async(brandId: string) => {
     });
     const page = await browser.newPage();
 
-    const brandUrl = `${process.env.CRAWLING_BASE_URL}${brandId}`
+    const brandUrl = `${process.env.CRAWLING_BASE_URL}/brand-size-chart/${brandId}`
     await page.goto(brandUrl);
 
     // Brand Name
@@ -168,4 +168,4 @@ const init = async () => {
     }
 }
 
-init();
+// init();
