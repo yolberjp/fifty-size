@@ -11,7 +11,7 @@ export class BrandLettersCrawler{
 
     async init(){
         await this.browser.init()
-        await this.browser.page.goto(this.getBrandLettersUrl())
+        await this.browser.page.goto(this.getUrl())
         await this.setBrandLetters()
     }
 
@@ -19,7 +19,7 @@ export class BrandLettersCrawler{
         await this.browser.close()
     }
 
-    private getBrandLettersUrl(){
+    private getUrl(){
         return `${process.env.CRAWLING_BASE_URL}${this.BRANDS_PATH}`
     }
 
