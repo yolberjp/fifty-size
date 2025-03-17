@@ -6,15 +6,20 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "crawl:brand-letters": "tsx src/crawling/brand-letters.process.ts",
+    "crawl:brand-size-charts": "tsx src/crawling/brand-size-charts.process.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
+    "@prisma/extension-accelerate": "^1.2.2",
+    "@prisma/ppg-tunnel": "^0.3.0",
     "dotenv": "^16.4.7",
     "next": "15.2.2",
     "playwright": "^1.51.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -22,6 +27,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/yargs": "^17.0.33",
     "eslint": "^9",
     "eslint-config-next": "15.2.2",
     "prisma": "^6.5.0",

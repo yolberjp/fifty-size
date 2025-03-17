@@ -31,14 +31,23 @@ export class BrandLettersCrawler{
                 const letter = brandLetter.getAttribute('data-letter')
                 const href = brandLetter.querySelector('a')?.href
                 if(letter && href){
-                    result.push({letter, href})
+                    result.push({letter: letter.replace('letter', ''), href})
                 }
             })
             return result
         })
     }
 
-    getLetters(){
+    getLetter(letter: string){
+        return this.letters.find(l => l.letter.toLowerCase() === letter.toLocaleLowerCase());
+    }
+
+    getLetters(start?: number, end?:number){
+
+        if(start !== undefined && end !== undefined){
+            return this.letters.slice(start, end)
+        }
+
         return this.letters
     }
 
@@ -47,7 +56,7 @@ export class BrandLettersCrawler{
 
         return await this.browser.page.$$eval('.brand_table', ()=>{
             
-            const result: {id: string, name: string, url: string}[] = [] 
+            const result: {id: string, name: string, url?: string}[] = [] 
             document.querySelectorAll('.bullet_square').forEach(item => {
                 const name = item.querySelector('meta[itemprop="name"]')?.getAttribute('content')
                 const url = item.querySelector('meta[itemprop="sameAs"]')?.getAttribute('content')
@@ -55,11 +64,11 @@ export class BrandLettersCrawler{
                 const href = item.querySelector('meta[itemprop="url"]')?.getAttribute('content')
                 const id = href?.split("/").pop()
 
-                if(name && url && id){
+                if(name && id){
                     result.push({
                         id,
                         name,
-                        url,
+                        url: url ?? undefined,
                     })
                 }
             })

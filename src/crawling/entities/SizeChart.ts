@@ -3,14 +3,36 @@ import { Size } from "./Size";
 
 export class SizeChart {
     private sizes: Size[] = [];
-    constructor(private categories: Category[]) {
-    }
+
+    constructor(private categories: Category[], private rawCategories: string, private collection?: string) {}
 
     setSize(size: Size){
         this.sizes.push(size);
     }
     public getCategories(){
         return this.categories;
+    }
+
+    public getRawCategories(){
+        return this.rawCategories
+    }
+
+    public getCollection(){
+        return this.collection
+    }
+
+    public getCanonicalCollection(){
+        if(this.collection){
+            return this.generateCanonical(this.collection)
+        }
+    }
+
+    public getCanonicalCategories(){
+        const sortedCategories = this.categories.sort((a, b) => a.getCategory().localeCompare(b.getCategory()))
+        const canonicalCategories = sortedCategories.map(category => {
+            return `${category.geCanonicalCategory()}:${category.geCanonicalSubCategory()}`
+        })
+        return canonicalCategories.join(';')
     }
 
     public getSizes(){
@@ -41,5 +63,13 @@ export class SizeChart {
             });
         });
         return sizesJson;
+    }
+
+    private generateCanonical(string: string) {
+        return string
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-+|-+$/g, '')
     }
 }

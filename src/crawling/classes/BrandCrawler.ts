@@ -44,16 +44,28 @@ export class BrandCrawler {
     
                 // Categories
                 const categoryHeader = sizeChart.querySelector('.brand_type_category')?.textContent?.trim()
-                const categories = categoryHeader?.split('):')[1].split(';').map(category => {
+
+                if(!categoryHeader){
+                    throw new Error('category header capture failed')
+                }
+
+                const rawCategories = categoryHeader.split('):')[1]
+
+                const sizeChartCategories = rawCategories.split(';').map(category => {
                     const match = category.match(/(.*?)\((.*?)\)/);
     
                     if(match){
-                        return {name: match[1].trim(), gender: match[2].trim()}
+                        return {category: match[1].trim(), subCategory: match[2].trim()}
                     }
+                    return {category, subCategory: 'none'}
+                });
     
-                    return null
-                }).filter(category => category !== null) || [];
-    
+                if(sizeChartCategories.length === 0){
+                    throw new Error(categoryHeader)
+                }
+
+                const collectionHeader = sizeChart.querySelector('.brand_type_name')?.textContent?.trim()
+                const collection = collectionHeader?.split(':')[1].trim()
     
                 // Sizes
                 const sizes: {sizeSystem: string, sizeValues: string[]}[] = []
@@ -71,9 +83,10 @@ export class BrandCrawler {
                     sizes.push({sizeSystem, sizeValues})
                 })
     
-    
                 return {
-                    categories,
+                    rawCategories,
+                    categories: sizeChartCategories,
+                    collection,
                     sizes
                 }
                 
@@ -81,12 +94,13 @@ export class BrandCrawler {
         })
 
         sizeCharts.forEach((chart)=>{
-            const categories = chart?.categories?.map(category => new Category(category.name, category.gender));
-            const sizeChart = new SizeChart(categories || []);
+            const categories = chart.categories.map(({category, subCategory}) => new Category(category, subCategory));
+            const sizeChart = new SizeChart(categories, chart.rawCategories, chart.collection);
     
-            chart?.sizes?.forEach(size => {
+            chart.sizes.forEach(size => {
                 size.sizeValues.forEach((sizeValue, index)=>{
-                    sizeChart.setSize(new Size(size.sizeSystem, sizeValue, index));
+                    const sizePosition = index + 1;
+                    sizeChart.setSize(new Size(size.sizeSystem, sizeValue, sizePosition));
                 })
                 
             })
