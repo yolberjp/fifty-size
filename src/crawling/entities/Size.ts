@@ -1,18 +1,19 @@
 export class Size {
-    constructor(private sizeSystem: string, private size: string, private sizePosition: number) {
-    }
+  constructor(
+    private sizeSystem: string,
+    private size: string,
+    private sizePosition: number,
+  ) {}
 
-    public getSize(){
-        return this.size;
-    }
+  public getSize() {
+    return this.size;
+  }
 
-    public getSizeSystem(){
-        return this.sizeSystem;
-    }
+  public getSizeSystem() {
+    return this.sizeSystem;
+  }
 
-    public getSizePosition(){
-        return this.sizePosition;
-    }
-
-
+  public getSizePosition() {
+    return this.sizePosition;
+  }
 }
