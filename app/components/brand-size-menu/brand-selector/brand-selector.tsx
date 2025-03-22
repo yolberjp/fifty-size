@@ -1,11 +1,13 @@
 'use client';
 
+import { useQuery } from '@tanstack/react-query';
+import { LoaderCircle } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 
-import { getBrand } from './actions';
+import { fetchBrand } from './actions';
 import Selector from './selector';
 
 interface Brand {
@@ -22,28 +24,36 @@ const defaultBrand = {
 
 export default function BrandSelector() {
   const [selectedId, setSelectedId] = useState<string>(defaultBrand.id);
-  const [brand, setBrand] = useState<Brand>(defaultBrand);
 
-  useEffect(() => {
-    const fetchBrand = async () => {
-      const result = await getBrand(selectedId);
-      if (result) {
-        setBrand(result);
-      }
-    };
-
-    fetchBrand();
-  }, [selectedId]);
+  const { data: brand, isLoading } = useQuery<Brand>({
+    queryKey: ['brand', selectedId],
+    queryFn: () => fetchBrand(selectedId),
+  });
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <div className="flex flex-col h-full w-sm gap-1 hover:bg-gray-100 rounded-full">
           <div className="flex w-full h-full justify-center items-center">
-            {brand.logoUrl && (
-              <figure>
-                <Image src={brand.logoUrl} alt="zara logo" width={50} height={20} />
+            {isLoading && <LoaderCircle className="animate-spin text-gray-400" />}
+
+            {brand?.logoUrl ? (
+              <figure
+                className={`
+                transition-opacity duration-300 ease-in-out
+                ${isLoading ? 'opacity-0' : 'opacity-100'}
+              `}
+              >
+                <Image
+                  src={brand.logoUrl}
+                  alt={`${brand.name} logo`}
+                  width={50}
+                  height={20}
+                  className="transition-all duration-300 ease-in-out"
+                />
               </figure>
+            ) : (
+              brand?.name
             )}
           </div>
         </div>

@@ -12,11 +12,17 @@ export default function BrandSizeMenu() {
         <span className="absolute inset-0 rounded-full p-[2px] bg-gradient-to-r from-red-500 to-purple-500">
           <div className="flex gap-1 h-full w-full items-center bg-white rounded-full">
             <BrandSelector />
+
             <Separator orientation="vertical" className="!h-10" />
+
             <CategorySelector />
+
             <Separator orientation="vertical" className="!h-10" />
+
             <GenderSelector />
+
             <Separator orientation="vertical" className="!h-10" />
+
             <SizeSelector />
           </div>
         </span>

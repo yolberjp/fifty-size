@@ -3,7 +3,7 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '@/components/ui/input';
 
-import { getBrands } from './actions';
+import { fetchBrands } from './actions';
 
 interface Brand {
   id: string;
@@ -27,12 +27,12 @@ export default function BrandSelector({ onSelect }: { onSelect?: (value: string)
   useEffect(() => {
     console.log('search', search);
     console.log('hit useEffect');
-    const fetchBrands = async () => {
-      const result = await getBrands(search);
+    const getBrands = async () => {
+      const result = await fetchBrands(search);
       setBrands(result);
     };
 
-    fetchBrands();
+    getBrands();
   }, [search]);
 
   const handleSelect = (brandId: string) => {

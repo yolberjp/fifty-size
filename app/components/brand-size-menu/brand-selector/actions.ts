@@ -4,7 +4,7 @@ import { unstable_cache } from 'next/cache';
 
 import { prisma } from '@/lib/prisma';
 
-export const getBrands = unstable_cache(async (search?: string) => {
+export const fetchBrands = unstable_cache(async (search?: string) => {
   console.log('hit database');
   const brands = await prisma.brand.findMany({
     where: {
@@ -19,10 +19,14 @@ export const getBrands = unstable_cache(async (search?: string) => {
   return brands;
 });
 
-export async function getBrand(id: string) {
+export async function fetchBrand(id: string) {
   const brand = await prisma.brand.findUnique({
     where: { id },
   });
+
+  if (!brand) {
+    throw new Error(`Brand with id ${id} not found`);
+  }
 
   return brand;
 }

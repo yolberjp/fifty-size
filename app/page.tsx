@@ -1,6 +1,22 @@
+import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+
+import { fetchBrand, fetchBrands } from './components/brand-size-menu/brand-selector/actions';
 import BrandSizeMenu from './components/brand-size-menu/brand-size-menu';
+import { getQueryClient } from './providers/query-client';
 
 export default function Home() {
+  const queryClient = getQueryClient();
+
+  queryClient.prefetchQuery({
+    queryKey: ['brands'],
+    queryFn: () => fetchBrands(),
+  });
+
+  queryClient.prefetchQuery({
+    queryKey: ['brand', 'zara'],
+    queryFn: () => fetchBrand('zara'),
+  });
+
   return (
     <>
       <div className="flex-none fixed -z-1">
@@ -15,7 +31,9 @@ export default function Home() {
             Fifty Size
           </h1>
 
-          <BrandSizeMenu />
+          <HydrationBoundary state={dehydrate(queryClient)}>
+            <BrandSizeMenu />
+          </HydrationBoundary>
         </main>
       </div>
     </>
