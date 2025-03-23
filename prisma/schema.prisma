@@ -8,72 +8,71 @@ datasource db {
 }
 
 model Brand {
-  id    String  @id @unique
-  name  String
-  siteUrl   String?
-  logoUrl String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
+  id         String      @id @unique
+  name       String
+  siteUrl    String?
+  logoUrl    String?
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now()) @updatedAt
   sizeCharts SizeChart[]
 }
 
 model SizeChart {
-  id       Int         @id @default(autoincrement())
-  brandId  String
-  rawCategories String
+  id                  Int                 @id @default(autoincrement())
+  brandId             String
+  rawCategories       String
   canonicalCategories String
   canonicalCollection String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt @default(now())
-  brand    Brand       @relation(fields: [brandId], references: [id], onDelete: Cascade)
-  sizes      Size[]
-  sizeChartCategory SizeChartCategory[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @default(now()) @updatedAt
+  brand               Brand               @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  sizes               Size[]
+  sizeChartCategory   SizeChartCategory[]
 
   @@unique([brandId, canonicalCategories])
 }
 
 model Category {
-  id          Int      @id @default(autoincrement())
-  name        String
-  canonical   String @unique()
+  id                Int                 @id @default(autoincrement())
+  name              String
+  canonical         String              @unique()
   sizeChartCategory SizeChartCategory[]
 }
 
 model SubCategory {
-  id          Int      @id @default(autoincrement())
-  name        String
-  canonical   String @unique()
-  type        String?
+  id                Int                 @id @default(autoincrement())
+  name              String
+  canonical         String              @unique()
+  type              String?
   sizeChartCategory SizeChartCategory[]
 }
 
 model Colletion {
-  id          Int      @id @default(autoincrement())
-  name        String
-  canonical   String @unique()
+  id                Int                 @id @default(autoincrement())
+  name              String
+  canonical         String              @unique()
   sizeChartCategory SizeChartCategory[]
 }
 
 model SizeChartCategory {
-  sizeChartId Int
-  categoryId Int
+  sizeChartId   Int
+  categoryId    Int
   subCategoryId Int
-  collectionId Int
+  collectionId  Int
 
-  sizeChart SizeChart @relation(fields: [sizeChartId], references: [id], onDelete: Cascade)
-  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  sizeChart   SizeChart   @relation(fields: [sizeChartId], references: [id], onDelete: Cascade)
+  category    Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   subCategory SubCategory @relation(fields: [subCategoryId], references: [id], onDelete: Cascade)
-  collection Colletion @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  collection  Colletion   @relation(fields: [collectionId], references: [id], onDelete: Cascade)
 
-   @@id([sizeChartId, categoryId, subCategoryId, collectionId])
+  @@id([sizeChartId, categoryId, subCategoryId, collectionId])
 }
 
-
 model Size {
-  id          Int      @id @default(autoincrement())
-  sizeChartId Int
-  sizeSystem  String
-  size        String
+  id           Int       @id @default(autoincrement())
+  sizeChartId  Int
+  sizeSystem   String
+  size         String
   sizePosition Int
-  sizeChart   SizeChart @relation(fields: [sizeChartId], references: [id], onDelete: Cascade)
+  sizeChart    SizeChart @relation(fields: [sizeChartId], references: [id], onDelete: Cascade)
 }

@@ -1,23 +1,31 @@
 'use server';
 
-import { unstable_cache } from 'next/cache';
-
+import { POPULAR_BRAND_IDS } from '@/config/constants';
 import { prisma } from '@/lib/prisma';
 
-export const fetchBrands = unstable_cache(async (search?: string) => {
-  console.log('hit database');
+export const fetchBrands = async (search?: string) => {
+  console.log('search brands', 'hit database');
   const brands = await prisma.brand.findMany({
     where: {
       name: { contains: search, mode: 'insensitive' },
     },
-    // orderBy: {
-    //   popularity: 'asc',
-    // },
     take: 9,
   });
 
   return brands;
-});
+};
+
+export const fetchPopularBrands = async () => {
+  console.log('popular brands', 'hit database');
+  const brands = await prisma.brand.findMany({
+    where: {
+      id: { in: POPULAR_BRAND_IDS },
+    },
+    take: 9,
+  });
+
+  return brands;
+};
 
 export async function fetchBrand(id: string) {
   const brand = await prisma.brand.findUnique({

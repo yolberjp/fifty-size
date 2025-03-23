@@ -1,41 +1,43 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { z } from 'zod';
 
-import { fetchBrand, fetchBrands } from './components/brand-size-menu/brand-selector/actions';
-import BrandSizeMenu from './components/brand-size-menu/brand-size-menu';
+import { DEFAULT_BRAND_ID } from '@/config/constants';
+
+import { fetchBrand, fetchPopularBrands } from './actions/brand-actions';
+import ProductFilterBar from './components/brand-size-menu/product-filter-bar';
 import { getQueryClient } from './providers/query-client';
 
-export default function Home() {
+const schema = z.object({
+  id: z.string().optional(),
+});
+
+export default async function Home({ searchParams }: { searchParams: Promise<{ id?: string }> }) {
+  const { id } = schema.parse(await searchParams);
   const queryClient = getQueryClient();
 
-  queryClient.prefetchQuery({
-    queryKey: ['brands'],
-    queryFn: () => fetchBrands(),
+  const brandId = id ?? DEFAULT_BRAND_ID;
+
+  await queryClient.prefetchQuery({
+    queryKey: ['brand', brandId],
+    queryFn: () => fetchBrand(brandId),
   });
 
-  queryClient.prefetchQuery({
-    queryKey: ['brand', 'zara'],
-    queryFn: () => fetchBrand('zara'),
+  await queryClient.prefetchQuery({
+    queryKey: ['popular-brands'],
+    queryFn: () => fetchPopularBrands(),
   });
 
   return (
-    <>
-      <div className="flex-none fixed -z-1">
-        <div
-          className="fixed inset-0 w-screen h-screen bg-repeat invert-100"
-          style={{ backgroundImage: `url('/rR6HYXBrM.png')`, backgroundSize: 200, opacity: 0.08 }}
-        ></div>
-      </div>
-      <div>
-        <main className="flex flex-col gap-10 items-center mt-[10%] max-w-5xl w-full m-auto">
-          <h1 className="text-7xl font-bold p-1 bg-clip-text text-transparent bg-gradient-to-r from-red-700 to-purple-800 tracking-tighter">
-            Fifty Size
-          </h1>
+    <div>
+      <main className="flex flex-col gap-10 items-center mt-[10%] max-w-5xl w-full m-auto">
+        <h1 className="text-7xl font-bold p-1 bg-clip-text text-transparent bg-gradient-to-r from-red-700 to-purple-800 tracking-tighter">
+          Fifty Size
+        </h1>
 
-          <HydrationBoundary state={dehydrate(queryClient)}>
-            <BrandSizeMenu />
-          </HydrationBoundary>
-        </main>
-      </div>
-    </>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+          <ProductFilterBar brandId={brandId} />
+        </HydrationBoundary>
+      </main>
+    </div>
   );
 }

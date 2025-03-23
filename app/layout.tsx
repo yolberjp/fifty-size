@@ -2,6 +2,7 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
+import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
 import Providers from './providers/providers';
 
@@ -31,7 +32,21 @@ export default function RootLayout({
         <link rel="icon" href="/fs-icon.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>{children}</Providers>
+        <>
+          <div className="flex-none fixed -z-1">
+            <div
+              className="fixed inset-0 w-screen h-screen bg-repeat invert-100"
+              style={{
+                backgroundImage: `url('/rR6HYXBrM.png')`,
+                backgroundSize: 200,
+                opacity: 0.08,
+              }}
+            ></div>
+          </div>
+          <NuqsAdapter>
+            <Providers>{children}</Providers>
+          </NuqsAdapter>
+        </>
       </body>
     </html>
   );
