@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator';
 import BrandChoice from '../brand-choice/brand-choice';
 import CategoryChoice from '../category-choice/category-choice';
 import GenderChoice from '../gender-choice/gender-choice';
-import SizeSelector from '../size-selector/size-selector';
+import SizeSelector from '../size-choice/size-choice';
 
 export default async function ProductFilterBar({ brandId }: { brandId: string }) {
   const [brand, categories, genders] = await Promise.all([
@@ -32,7 +32,7 @@ export default async function ProductFilterBar({ brandId }: { brandId: string })
 
             <Separator orientation="vertical" className="!h-10" />
 
-            <SizeSelector />
+            <SizeSelector sizes={[]} />
           </div>
         </span>
       </div>

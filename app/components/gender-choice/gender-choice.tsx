@@ -1,7 +1,7 @@
 'use client';
 
 import { VenusAndMars } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
@@ -23,12 +23,16 @@ export default function GenderChoice({
   const [open, setOpen] = useState(false);
   const [selectedGender, setSelectedGender] = useState<Gender | null>(null);
 
+  useEffect(() => {
+    setSelectedGender(null);
+  }, [genders]);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <div
           className={cn(
-            'flex flex-col w-full gap-1 h-full hover:bg-gray-100 rounded-full py-2 px-6',
+            'flex flex-col w-[180px] min-w-[180px] gap-1 h-full hover:bg-gray-100 rounded-full py-2 px-6',
             selectedGender ? 'justify-start' : 'justify-center',
           )}
         >
@@ -45,7 +49,7 @@ export default function GenderChoice({
           </div>
           <div
             className={cn(
-              'transition-all duration-300 ease-in-out capitalize',
+              'transition-all duration-300 ease-in-out capitalize text-nowrap w-full truncate',
               selectedGender ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
             )}
           >

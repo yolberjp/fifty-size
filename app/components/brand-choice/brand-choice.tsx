@@ -26,13 +26,13 @@ export default function BrandChoice({ name, logoUrl }: BrandChoiceProps) {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <div className="flex flex-col justify-center items-center h-full w-sm gap-1 hover:bg-gray-100 rounded-full">
-          <div className="flex w-[86px] h-[70px] justify-center items-center">
+          <div className="flex w-[120px] min-w-[120px] h-[70px] justify-center items-center">
             {false ? (
               <LoaderCircle className="animate-spin text-gray-400" />
             ) : name ? (
               <BrandDisplay name={name} imageUrl={logoUrl} />
             ) : (
-              <div className="flex items-center gap-1 text-gray-500 text-sm font-medium">
+              <div className="flex items-center gap-1 text-gray-600 text-md font-medium">
                 <Bookmark className="w-4 h-4" />
                 <span>Brand</span>
               </div>

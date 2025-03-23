@@ -1,7 +1,7 @@
 'use client';
 
 import { Shirt } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
@@ -22,6 +22,10 @@ export default function CategoryChoice({
 }) {
   const [open, setOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+
+  useEffect(() => {
+    setSelectedCategory(null);
+  }, [categories]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
