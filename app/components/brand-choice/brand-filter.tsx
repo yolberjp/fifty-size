@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useState } from 'react';
 
+import { Skeleton } from '@/components/ui/skeleton';
+
 import { fetchBrands, fetchPopularBrands } from '../../actions/brand-actions';
 import DebouncedInput from '../debounced-search-filter';
 
@@ -19,9 +21,7 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
   const [search, setSearch] = useState<string | undefined>();
   const [brandId, setBrandId] = useQueryState('id');
 
-  console.log(search);
-
-  const { data: filteredBrands = [] } = useQuery<Brand[]>({
+  const { data: filteredBrands = [], isLoading } = useQuery<Brand[]>({
     queryKey: ['brands', search],
     queryFn: () => fetchBrands(search),
     enabled: !!search,
@@ -51,6 +51,9 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
       </div>
       <div>
         <div role="listbox" aria-label="Seleccionar marca" className="grid grid-cols-3 gap-4">
+          {isLoading &&
+            [...Array(9)].map((_, i) => <Skeleton key={i} className="h-[70px] w-full" />)}
+
           {brands.map((brand) => (
             <div
               key={brand.id}
