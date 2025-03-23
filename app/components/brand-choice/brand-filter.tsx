@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
+import { Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
 import { useState } from 'react';
@@ -46,8 +47,13 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
         <h4 className="font-medium leading-none">Brand</h4>
         <p className="text-sm text-muted-foreground">Search over 2,500 brands</p>
       </header>
-      <div>
-        <DebouncedInput onChange={setSearch} />
+      <div className="flex items-center gap-1 border-b px-3">
+        <Search className="w-4 h-4 text-muted-foreground" />
+        <DebouncedInput
+          onInputChange={setSearch}
+          placeholder="Filter brand..."
+          className="px-0 border-none shadow-none focus-visible:ring-0 placeholder:text-muted-foreground flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-hidden disabled:cursor-not-allowed disabled:opacity-50"
+        />
       </div>
       <div>
         <div role="listbox" aria-label="Seleccionar marca" className="grid grid-cols-3 gap-4">
@@ -64,7 +70,7 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
               }`}
               onClick={() => handleSelect(brand.id)}
             >
-              <span className="text-xs capitalize">{brand.name.toLowerCase()}</span>
+              <span className="text-sm capitalize">{brand.name.toLowerCase()}</span>
               {/* {brand.logoUrl && (
                   <figure>
                     <Image src={brand.logoUrl} alt="zara logo" width={50} height={20} />

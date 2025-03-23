@@ -38,3 +38,15 @@ export async function fetchBrand(id: string) {
 
   return brand;
 }
+
+export async function fetchFullBrand(id: string) {
+  const brand = await prisma.brand.findUnique({
+    where: { id },
+  });
+
+  if (!brand) {
+    throw new Error(`Brand with id ${id} not found`);
+  }
+
+  return brand;
+}

@@ -4,10 +4,15 @@ import { useDebouncedCallback } from 'use-debounce';
 
 import { Input } from '@/components/ui/input';
 
-export default function DebouncedInput({ onChange }: { onChange: (search: string) => void }) {
+export default function DebouncedInput({
+  onInputChange,
+  ...props
+}: {
+  onInputChange: (search: string) => void;
+} & React.ComponentProps<typeof Input>) {
   const debounced = useDebouncedCallback(
     (value) => {
-      onChange(value);
+      onInputChange(value);
     },
     500,
     { maxWait: 2000 },
@@ -17,7 +22,7 @@ export default function DebouncedInput({ onChange }: { onChange: (search: string
       onChange={(e) => {
         debounced(e.target.value);
       }}
-      className="col-span-3 h-8"
+      {...props}
     />
   );
 }
