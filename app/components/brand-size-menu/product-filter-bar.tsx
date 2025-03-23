@@ -1,14 +1,19 @@
 import { fetchBrand } from '@/app/actions/brand-actions';
 import { fetchCategories } from '@/app/actions/category-actions';
+import { fetchGenders } from '@/app/actions/gender-actions';
 import { Separator } from '@/components/ui/separator';
 
 import BrandChoice from '../brand-choice/brand-choice';
-import CategorySelector from '../category-choice/category-choice';
-import GenderSelector from '../gender-selector/gender-selector';
+import CategoryChoice from '../category-choice/category-choice';
+import GenderChoice from '../gender-choice/gender-choice';
 import SizeSelector from '../size-selector/size-selector';
 
 export default async function ProductFilterBar({ brandId }: { brandId: string }) {
-  const [brand, categories] = await Promise.all([fetchBrand(brandId), fetchCategories(brandId)]);
+  const [brand, categories, genders] = await Promise.all([
+    fetchBrand(brandId),
+    fetchCategories(brandId),
+    fetchGenders(brandId),
+  ]);
 
   return (
     <div className="w-full p-5 flex items-center justify-center rounded-xl">
@@ -19,11 +24,11 @@ export default async function ProductFilterBar({ brandId }: { brandId: string })
 
             <Separator orientation="vertical" className="!h-10" />
 
-            <CategorySelector categories={categories} />
+            <CategoryChoice categories={categories} />
 
             <Separator orientation="vertical" className="!h-10" />
 
-            <GenderSelector />
+            <GenderChoice genders={genders} />
 
             <Separator orientation="vertical" className="!h-10" />
 
