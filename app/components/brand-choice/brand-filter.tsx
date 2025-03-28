@@ -2,9 +2,8 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { Search } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { useQueryState } from 'nuqs';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -17,29 +16,29 @@ interface Brand {
   logoUrl: string | null;
 }
 
-export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) => void }) {
-  const router = useRouter();
+export default function BrandFilter({ onSelect }: { onSelect: (brand: Brand) => void }) {
   const [search, setSearch] = useState<string | undefined>();
   const [brandId, setBrandId] = useQueryState('id');
 
-  const { data: filteredBrands = [], isLoading } = useQuery<Brand[]>({
+  const { data: filteredBrands = [], isLoading: filteredBrandsIsLoading } = useQuery<Brand[]>({
     queryKey: ['brands', search],
     queryFn: () => fetchBrands(search),
     enabled: !!search,
   });
 
-  const { data: popularBrands = [] } = useQuery<Brand[]>({
+  const { data: popularBrands = [], isLoading: popularBrandsIsLoading } = useQuery<Brand[]>({
     queryKey: ['popular-brands'],
     queryFn: fetchPopularBrands,
   });
 
   const brands = search ? filteredBrands : popularBrands;
 
-  const handleSelect = async (brandId: string) => {
-    await setBrandId(brandId);
-    onSelect(brandId);
-    router.refresh();
+  const handleSelect = async (brand: Brand) => {
+    await setBrandId(brand.id);
+    onSelect(brand);
   };
+
+  const isLoading = filteredBrandsIsLoading || popularBrandsIsLoading;
 
   return (
     <section className="grid gap-4">
@@ -57,8 +56,7 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
       </div>
       <div>
         <div role="listbox" aria-label="Seleccionar marca" className="grid grid-cols-3 gap-4">
-          {isLoading &&
-            [...Array(9)].map((_, i) => <Skeleton key={i} className="h-[70px] w-full" />)}
+          {isLoading && <BrandListSkeleton />}
 
           {brands.map((brand) => (
             <div
@@ -68,7 +66,7 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
               className={`flex items-center justify-center text-center h-[70px] border rounded-sm p-2 cursor-pointer hover:bg-gray-100 ${
                 brandId === brand.id ? 'bg-gray-100 border-blue-500' : ''
               }`}
-              onClick={() => handleSelect(brand.id)}
+              onClick={() => handleSelect(brand)}
             >
               <span className="text-sm capitalize">{brand.name.toLowerCase()}</span>
               {/* {brand.logoUrl && (
@@ -83,3 +81,7 @@ export default function BrandFilter({ onSelect }: { onSelect: (brandId: string) 
     </section>
   );
 }
+
+const BrandListSkeleton = memo(function BrandListSkeleton() {
+  return [...Array(9)].map((_, i) => <Skeleton key={i} className="h-[70px] w-full" />);
+});

@@ -13,14 +13,18 @@ type BrandChoiceProps = {
   logoUrl: string | null;
 };
 
-export default function BrandChoice({ name, logoUrl }: BrandChoiceProps) {
+export default function BrandChoice({
+  name: initialName,
+  logoUrl: initialLogoUrl,
+}: BrandChoiceProps) {
   const [open, setOpen] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<{
+    name: string;
+    logoUrl: string | null;
+  } | null>(initialName ? { name: initialName, logoUrl: initialLogoUrl } : null);
 
-  // const { data: brand, isLoading } = useQuery<Brand>({
-  //   queryKey: ['brand', brandId],
-  //   queryFn: () => fetchBrand(brandId),
-  //   retry: false,
-  // });
+  const displayName = selectedBrand?.name || initialName;
+  const displayLogoUrl = selectedBrand?.logoUrl || initialLogoUrl;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -29,8 +33,8 @@ export default function BrandChoice({ name, logoUrl }: BrandChoiceProps) {
           <div className="flex w-[86px] h-[70px] justify-center items-center">
             {false ? (
               <LoaderCircle className="animate-spin text-gray-400" />
-            ) : name ? (
-              <BrandDisplay name={name} imageUrl={logoUrl} />
+            ) : displayName ? (
+              <BrandDisplay name={displayName} imageUrl={displayLogoUrl} />
             ) : (
               <div className="flex items-center gap-1 text-gray-500 text-sm font-medium">
                 <Bookmark className="w-4 h-4" />
@@ -41,7 +45,12 @@ export default function BrandChoice({ name, logoUrl }: BrandChoiceProps) {
         </div>
       </PopoverTrigger>
       <PopoverContent className="w-96 rounded-xl mt-2">
-        <BrandFilter onSelect={() => setOpen(false)} />
+        <BrandFilter
+          onSelect={(brand) => {
+            setSelectedBrand(brand);
+            setOpen(false);
+          }}
+        />
       </PopoverContent>
     </Popover>
   );

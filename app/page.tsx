@@ -17,11 +17,6 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ i
 
   const brandId = id ?? DEFAULT_BRAND_ID;
 
-  // await queryClient.prefetchQuery({
-  //   queryKey: ['brand', brandId],
-  //   queryFn: () => fetchBrand(brandId),
-  // });
-
   await queryClient.prefetchQuery({
     queryKey: ['popular-brands'],
     queryFn: () => fetchPopularBrands(),
